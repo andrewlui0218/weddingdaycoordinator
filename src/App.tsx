@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import OverallTimetable from './pages/OverallTimetable';
 import HelperTimetable from './pages/HelperTimetable';
@@ -18,7 +18,7 @@ import { AuthProvider } from './lib/AuthContext';
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<OverallTimetable />} />
@@ -31,7 +31,7 @@ export default function App() {
             <Route path="photo-list" element={<PhotoList />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </AuthProvider>
   );
 }
