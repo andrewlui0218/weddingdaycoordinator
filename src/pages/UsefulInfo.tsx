@@ -24,7 +24,7 @@ export default function UsefulInfo() {
             <h3 className="text-[11px] uppercase tracking-widest text-accent-gold mb-4">Floor Plan (Grand Ball Room)</h3>
             <div className="bg-white/40 rounded-xl flex items-center justify-center text-text-muted border border-glass-border overflow-hidden relative group">
               <img 
-                src="/floor-plan.jpg" 
+                src={`${import.meta.env.BASE_URL}floor-plan.jpg`} 
                 alt="Grand Ballroom Floor Plan" 
                 className="w-full h-auto object-contain"
                 referrerPolicy="no-referrer"
@@ -75,7 +75,7 @@ export default function UsefulInfo() {
           <div className="grid grid-cols-1 gap-4">
             <div className="bg-white/40 rounded-xl flex items-center justify-center text-text-muted border border-glass-border overflow-hidden relative">
               <img 
-                src="/deco-sim-1.jpg" 
+                src={`${import.meta.env.BASE_URL}deco-sim-1.jpg`} 
                 alt="Decoration Simulation 1" 
                 className="w-full h-auto object-contain"
                 referrerPolicy="no-referrer"
@@ -91,7 +91,7 @@ export default function UsefulInfo() {
             </div>
             <div className="bg-white/40 rounded-xl flex items-center justify-center text-text-muted border border-glass-border overflow-hidden relative">
               <img 
-                src="/deco-sim-2.jpg" 
+                src={`${import.meta.env.BASE_URL}deco-sim-2.jpg`} 
                 alt="Decoration Simulation 2" 
                 className="w-full h-auto object-contain"
                 referrerPolicy="no-referrer"
@@ -107,7 +107,7 @@ export default function UsefulInfo() {
             </div>
             <div className="bg-white/40 rounded-xl flex items-center justify-center text-text-muted border border-glass-border overflow-hidden relative">
               <img 
-                src="/deco-sim-3.jpg" 
+                src={`${import.meta.env.BASE_URL}deco-sim-3.jpg`} 
                 alt="Decoration Simulation 3" 
                 className="w-full h-auto object-contain"
                 referrerPolicy="no-referrer"
