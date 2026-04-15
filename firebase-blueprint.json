@@ -1,0 +1,93 @@
+{
+  "entities": {
+    "Guest": {
+      "title": "Guest",
+      "description": "A guest attending the wedding.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the guest."
+        },
+        "table": {
+          "type": "string",
+          "description": "The table assigned to the guest."
+        },
+        "attended": {
+          "type": "boolean",
+          "description": "Whether the guest has attended."
+        },
+        "giftReceived": {
+          "type": "boolean",
+          "description": "Whether the guest has given a gift (人情)."
+        }
+      },
+      "required": ["name", "table", "attended", "giftReceived"]
+    },
+    "Material": {
+      "title": "Material",
+      "description": "A material item for the wedding.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the material."
+        },
+        "room": {
+          "type": "string",
+          "description": "The room or location where the material is."
+        },
+        "bag": {
+          "type": "string",
+          "description": "The bag or container for the material."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["Pending", "Packed"],
+          "description": "The packing status of the material."
+        }
+      },
+      "required": ["name", "room", "bag", "status"]
+    },
+    "PhotoListItem": {
+      "title": "PhotoListItem",
+      "description": "An item in the photo checklist.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "description": "The order number of the photo."
+        },
+        "guest": {
+          "type": "string",
+          "description": "The guest or group to be photographed."
+        },
+        "completed": {
+          "type": "boolean",
+          "description": "Whether the photo has been taken."
+        }
+      },
+      "required": ["id", "guest", "completed"]
+    }
+  },
+  "firestore": {
+    "/guests/{guestId}": {
+      "schema": {
+        "$ref": "#/entities/Guest"
+      },
+      "description": "The collection of guests."
+    },
+    "/materials/{materialId}": {
+      "schema": {
+        "$ref": "#/entities/Material"
+      },
+      "description": "The collection of materials."
+    },
+    "/photos/{photoId}": {
+      "schema": {
+        "$ref": "#/entities/PhotoListItem"
+      },
+      "description": "The collection of photo checklist items."
+    }
+  }
+}

@@ -1,0 +1,97 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: guests
+    // Document ID: auto-generated
+    // Fields:
+    //   - name: string (required, max 100 chars) - The name of the guest
+    //   - table: string (required, max 100 chars) - The table assigned to the guest
+    //   - attended: boolean (required) - Whether the guest has attended
+    //   - giftReceived: boolean (required) - Whether the guest has given a gift
+    //
+    // Collection: materials
+    // Document ID: auto-generated
+    // Fields:
+    //   - name: string (required, max 200 chars) - The name of the material
+    //   - room: string (required, max 100 chars) - The room or location
+    //   - bag: string (required, max 100 chars) - The bag or container
+    //   - status: string (required, enum: ['Pending', 'Packed']) - Packing status
+    //
+    // Collection: photos
+    // Document ID: auto-generated
+    // Fields:
+    //   - id: number (required) - The order number of the photo
+    //   - guest: string (required, max 200 chars) - The guest or group to be photographed
+    //   - completed: boolean (required) - Whether the photo has been taken
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    function isValidGuest(data) {
+      return hasOnlyAllowedFields(['name', 'table', 'attended', 'giftReceived']) &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.table is string && data.table.size() > 0 && data.table.size() <= 100 &&
+             data.attended is bool &&
+             data.giftReceived is bool;
+    }
+
+    function isValidMaterial(data) {
+      return hasOnlyAllowedFields(['name', 'room', 'bag', 'status']) &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 200 &&
+             data.room is string && data.room.size() > 0 && data.room.size() <= 100 &&
+             data.bag is string && data.bag.size() > 0 && data.bag.size() <= 100 &&
+             data.status in ['Pending', 'Packed'];
+    }
+
+    function isValidPhoto(data) {
+      return hasOnlyAllowedFields(['id', 'guest', 'completed']) &&
+             data.id is number &&
+             data.guest is string && data.guest.size() > 0 && data.guest.size() <= 200 &&
+             data.completed is bool;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /guests/{guestId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isValidGuest(request.resource.data);
+      allow update: if isAuthenticated() && isValidGuest(request.resource.data);
+      allow delete: if isAuthenticated();
+    }
+
+    match /materials/{materialId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isValidMaterial(request.resource.data);
+      allow update: if isAuthenticated() && isValidMaterial(request.resource.data);
+      allow delete: if isAuthenticated();
+    }
+
+    match /photos/{photoId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isValidPhoto(request.resource.data);
+      allow update: if isAuthenticated() && isValidPhoto(request.resource.data);
+      allow delete: if isAuthenticated();
+    }
+  }
+}
