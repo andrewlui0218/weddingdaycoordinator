@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronUp, Package, Users, UserPlus, ExternalLink } from 'lucide-react';
 
-type ScheduleItem = {
+export type ScheduleItem = {
   id: string;
   category?: string;
   time: string;
@@ -11,7 +11,7 @@ type ScheduleItem = {
   materials: string;
 };
 
-const scheduleData: ScheduleItem[] = [
+export const scheduleData: ScheduleItem[] = [
   {
     id: "1",
     category: "準備 - WM hotel",
@@ -178,7 +178,7 @@ const scheduleData: ScheduleItem[] = [
     category: "換衫補妝",
     time: "13:00-14:30",
     event: "[兄弟姐妹] 14:00-14:30\n[Christy] 13:00-14:30\n[Andrew] 14:00-14:30",
-    groomsmen: "[兄弟] 到RmB預備外影物資 esp bump氣球\n[Emily, Kelly] 帶兄弟姐妹到酒店Lobby集合等外影，time keeper\n[Andrew, Dominic help] 食飯後返好個樣",
+    groomsmen: "[兄弟 JP, Wah, Lai Hin, Ku Ho] 攞紅色大袋B，Andrew燕尾服，兄弟個人物品大袋(all from room B) 去新娘房\n[兄弟] 到RmB預備外影物資 esp bump氣球\n[Emily, Kelly] 帶兄弟姐妹到酒店Lobby集合等外影，time keeper\n[Andrew, Dominic help] 食飯後返好個樣",
     bridesmaids: "[姐妹] 自行補妝\n到Rainbow房補妝/換外影婚紗\n[Christy+Aqua] 補妝/ 換婚紗",
     materials: "Andrew藍色西裝\nChristy緞面魚尾裙, 求婚戒指"
   },
@@ -268,7 +268,7 @@ const scheduleData: ScheduleItem[] = [
     category: "拍照",
     time: "20:20-21:00",
     event: "第一道菜後：按影相次序合照\n[Sophia/Kaming 輪流] 在台上安排影相次序：而家邊d人上台+叫定下一組係台邊預備+再下一組係邊圍",
-    groomsmen: "[Dominic, Elaine] (行埋去) 幫手係台下叫定親戚/男家父母朋友預備影相 (1-9)",
+    groomsmen: "[Dominic, Elaine] (行埋去) 幫手係台下叫定親戚/男家父母朋友預備影相 (1-9)\n[Lai Hin, Ku Ho] 男家影相時到Table邊提示下一組賓客預備（影相次序1-7）",
     bridesmaids: "",
     materials: "影相次序List"
   },

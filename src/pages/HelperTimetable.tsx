@@ -1,12 +1,14 @@
 import { useState } from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import { scheduleData } from './OverallTimetable';
 
 const helpers = [
-  "Rainbow Lee", "Anna Chau", "Vicky Tsang", "Emily Li", "Yin Yin", "Dominic Chan",
+  "Rainbow", "Anna", "Vicky", "Emily", "Yin Yin", "Dominic",
   "Lai Hin", "Ku Ho", "JP", "Wah", "Kelly", "Yannie"
 ];
 
-const helperTasks: Record<string, { time?: string, task: string }[]> = {
-  "Rainbow Lee": [
+const originalHelperTasks: Record<string, { time?: string, task: string }[]> = {
+  "Rainbow": [
     { task: "房卡 Rm A，出門房" },
     { time: "06:45-07:30", task: "Rm A化妝" },
     { time: "07:30-08:15", task: "Rm A到出門房，洗水杯，煲水 (先在 Rm A 問 Vicky 攞煲水水壺)，食早餐" },
@@ -19,7 +21,7 @@ const helperTasks: Record<string, { time?: string, task: string }[]> = {
     { time: "12:30-13:00", task: "RmA 幫 Christy 除金器，點齊後鎖 Rm A夾萬/行李箱 (with Emily)" },
     { time: "13:00-14:30", task: "lunch (外賣到幫我攞上黎 thx ~)" }
   ],
-  "Dominic Chan": [
+  "Dominic": [
     { task: "房卡 Rm A (早上後比 Rainbow), Rm B, 出門房" },
     { time: "05:45", task: "RmB -> 大堂接化妝師到出門房 / Rm A / Rm B -> Rm A 化妝" },
     { time: "06:00-06:25", task: "化妝" },
@@ -48,7 +50,7 @@ const helperTasks: Record<string, { time?: string, task: string }[]> = {
     { time: "12:30-13:00", task: "休息" },
     { time: "13:00-14:30", task: "lunch" }
   ],
-  "Vicky Tsang": [
+  "Vicky": [
     { task: "房卡 Rm A，Rm B，出門房，入門房" },
     { task: "24/4 攞自己 / Anna/ Yinyin房卡" },
     { time: "07:20", task: "到 Rm A，個人物品擺 Rm A" },
@@ -62,7 +64,7 @@ const helperTasks: Record<string, { time?: string, task: string }[]> = {
     { time: "12:30-13:00", task: "清理入門房裝飾 (with LaiHin，Wah，Anna)" },
     { time: "13:00-14:30", task: "lunch" }
   ],
-  "Anna Chau": [
+  "Anna": [
     { task: "房卡 Rm B，出門房" },
     { task: "25/4 ***先問 Vicky 攞房卡，將個人物品比 Vicky" },
     { time: "07:20", task: "到 Rm B" },
@@ -158,7 +160,7 @@ const helperTasks: Record<string, { time?: string, task: string }[]> = {
     { time: "13:00-14:00", task: "lunch" },
     { time: "14:00-14:20", task: "到 RmB 預備外影物資" }
   ],
-  "Emily Li": [
+  "Emily": [
     { task: "房卡 Rm B，出門房" },
     { task: "24/4 晚先攞定房卡" },
     { time: "08:10", task: "到 Rm B, 物品先放 Rm B" },
@@ -174,10 +176,57 @@ const helperTasks: Record<string, { time?: string, task: string }[]> = {
   ]
 };
 
+// Helper function to extract master timetable tasks for a specific person
+const getExtractedTasksForHelper = (helperName: string) => {
+  let searchNames: string[] = [helperName];
+  if (helperName === "Yin Yin") searchNames = ["Yinyin", "Yin Yin"];
+  if (helperName === "Ku Ho") searchNames = ["Ku Ho", "KuHo"];
+  if (helperName === "Lai Hin") searchNames = ["Lai Hin", "LaiHin"];
+
+  const derivedTasks: { time?: string, task: string, source: "master" }[] = [];
+
+  scheduleData.forEach(item => {
+    const time = item.time;
+    
+    // Check lines in event, groomsmen, and bridesmaids
+    const checkAndAdd = (text: string, sourceType: string) => {
+      if (!text) return;
+      const lines = text.split('\n');
+      lines.forEach(line => {
+        const hasMatch = searchNames.some(name => line.toLowerCase().includes(name.toLowerCase()));
+        if (hasMatch) {
+          // If there's a category, we can optionally prefix it
+          let prefix = "";
+          if (item.category && !line.includes(item.category)) {
+            prefix = `[${item.category}] `;
+          }
+          derivedTasks.push({
+            time: time,
+            task: `${prefix}${line.trim()}`,
+            source: "master"
+          });
+        }
+      });
+    };
+
+    checkAndAdd(item.event, 'event');
+    checkAndAdd(item.groomsmen, 'groomsmen');
+    checkAndAdd(item.bridesmaids, 'bridesmaids');
+  });
+
+  return derivedTasks;
+};
+
 export default function HelperTimetable() {
   const [selectedHelper, setSelectedHelper] = useState(helpers[0]);
+  const [isOriginalExpanded, setIsOriginalExpanded] = useState(false);
+  const [isExtractedExpanded, setIsExtractedExpanded] = useState(true);
 
-  const tasks = helperTasks[selectedHelper] || [];
+  const originalTasks = originalHelperTasks[selectedHelper] || [];
+  const extractedTasks = getExtractedTasksForHelper(selectedHelper);
+
+  // Combine and sort by time loosely if possible, or just append the master tasks at the end or in their own section.
+  // Given we want to preserve both, let's show them in two sections or merged. Let's merge them but label the source.
 
   return (
     <div className="space-y-6">
@@ -204,33 +253,80 @@ export default function HelperTimetable() {
         ))}
       </div>
 
-      <div className="bg-white/30 border border-glass-border rounded-2xl p-6">
-        <h3 className="text-[11px] uppercase tracking-widest text-accent-gold mb-6">{selectedHelper}'s Tasks</h3>
-        
-        {tasks.length > 0 ? (
-          <div className="space-y-4">
-            {tasks.map((task, index) => (
-              <div key={index} className="flex gap-4 items-start pb-4 border-b border-glass-border/50 last:border-0 last:pb-0">
-                {task.time ? (
-                  <div className="w-24 shrink-0 text-sm font-mono text-text-muted pt-0.5">
-                    {task.time}
-                  </div>
-                ) : (
-                  <div className="w-24 shrink-0 text-sm font-medium text-accent-gold pt-0.5">
-                    Note
-                  </div>
-                )}
-                <div className="text-[15px] text-text-main leading-relaxed">
-                  {task.task}
+      <div className="flex flex-col gap-6">
+        {/* Original Tasks */}
+        <div className="bg-white/30 border border-glass-border rounded-2xl overflow-hidden">
+          <button 
+            onClick={() => setIsOriginalExpanded(!isOriginalExpanded)}
+            className="w-full flex items-center justify-between p-6 hover:bg-white/10 transition-colors text-left"
+          >
+            <h3 className="text-[11px] uppercase tracking-widest text-accent-gold m-0">Original Assigned Tasks</h3>
+            {isOriginalExpanded ? <ChevronUp className="w-5 h-5 text-accent-gold" /> : <ChevronDown className="w-5 h-5 text-accent-gold" />}
+          </button>
+          
+          {isOriginalExpanded && (
+            <div className="px-6 pb-6 pt-0 border-t border-glass-border/20 mt-2 pt-4">
+              {originalTasks.length > 0 ? (
+                <div className="space-y-4">
+                  {originalTasks.map((task, index) => (
+                    <div key={index} className="flex gap-3 items-start pb-4 border-b border-glass-border/50 last:border-0 last:pb-0">
+                      {task.time ? (
+                        <div className="w-20 shrink-0 text-xs font-mono text-text-muted pt-1">
+                          {task.time}
+                        </div>
+                      ) : (
+                        <div className="w-20 shrink-0 text-xs font-medium text-accent-gold pt-1">
+                          Note
+                        </div>
+                      )}
+                      <div className="text-[14px] text-text-main leading-relaxed">
+                        {task.task}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-8 text-text-muted text-sm">
-            <p>Task breakdown for {selectedHelper} will be populated here based on the master schedule.</p>
-          </div>
-        )}
+              ) : (
+                <div className="text-center py-8 text-text-muted text-sm">
+                  <p>No original tasks found.</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Master Timetable Extracted Tasks */}
+        <div className="bg-white/30 border border-glass-border rounded-2xl overflow-hidden">
+          <button 
+            onClick={() => setIsExtractedExpanded(!isExtractedExpanded)}
+            className="w-full flex items-center justify-between p-6 hover:bg-white/10 transition-colors text-left"
+          >
+            <h3 className="text-[11px] uppercase tracking-widest text-accent-gold m-0">Tasks Extracted from Overall Timetable</h3>
+            {isExtractedExpanded ? <ChevronUp className="w-5 h-5 text-accent-gold" /> : <ChevronDown className="w-5 h-5 text-accent-gold" />}
+          </button>
+          
+          {isExtractedExpanded && (
+            <div className="px-6 pb-6 pt-0 border-t border-glass-border/20 mt-2 pt-4">
+              {extractedTasks.length > 0 ? (
+                <div className="space-y-4">
+                  {extractedTasks.map((task, index) => (
+                    <div key={index} className="flex gap-3 items-start pb-4 border-b border-glass-border/50 last:border-0 last:pb-0">
+                      <div className="w-20 shrink-0 text-xs font-mono text-text-muted pt-1">
+                        {task.time || "Anytime"}
+                      </div>
+                      <div className="text-[14px] text-text-main leading-relaxed">
+                        {task.task}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-text-muted text-sm">
+                  <p>No tasks found in the Overall Timetable.</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
