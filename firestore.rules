@@ -74,24 +74,24 @@ service cloud.firestore {
     // ===============================================================
 
     match /guests/{guestId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated() && isValidGuest(request.resource.data);
-      allow update: if isAuthenticated() && isValidGuest(request.resource.data);
-      allow delete: if isAuthenticated();
+      allow read: if true;
+      allow create: if isValidGuest(request.resource.data);
+      allow update: if isValidGuest(request.resource.data);
+      allow delete: if true;
     }
 
     match /materials/{materialId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated() && isValidMaterial(request.resource.data);
-      allow update: if isAuthenticated() && isValidMaterial(request.resource.data);
-      allow delete: if isAuthenticated();
+      allow read: if true;
+      allow create: if isValidMaterial(request.resource.data);
+      allow update: if isValidMaterial(request.resource.data);
+      allow delete: if true;
     }
 
     match /photos/{photoId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated() && isValidPhoto(request.resource.data);
-      allow update: if isAuthenticated() && isValidPhoto(request.resource.data);
-      allow delete: if isAuthenticated();
+      allow read: if true;
+      allow create: if isValidPhoto(request.resource.data);
+      allow update: if isValidPhoto(request.resource.data);
+      allow delete: if true;
     }
   }
 }
