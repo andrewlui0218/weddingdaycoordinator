@@ -22,7 +22,7 @@ const navItems = [
   { to: '/helper-timetable', icon: Clock, label: 'Helper Timetable' },
   { to: '/materials', icon: Package, label: 'Material List' },
   { to: '/guests', icon: Users, label: 'Guest List' },
-  { to: '/hotel-info', icon: Info, label: 'Hotel Info' },
+  { to: '/hotel-info', icon: Info, label: 'Hotel Room Info' },
   { to: '/contacts', icon: Phone, label: 'Contact List' },
   { to: '/useful-info', icon: Map, label: 'Useful Info' },
   { to: '/photo-list', icon: Camera, label: 'Photo List' },
