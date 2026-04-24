@@ -3,17 +3,17 @@ export default function HotelInfo() {
     {
       room: "出門房",
       roomType: "Suite Sea View Balcony (with breakfast)",
-      roomNumber: "",
+      roomNumber: "2107",
       date: "24/4-25/4 (1 night)",
       guests: "Christy, Christy 媽媽",
-      keyCards: 11,
-      ownerName: "Christy 媽媽, Christy 爸爸, Yannie x2, Rainbow, TC, Vicky, Emily, Anna, Yinyin, Dominic",
+      keyCards: 6,
+      ownerName: "Christy 媽媽, Yannie x2, Rainbow, Vicky, Dominic",
       note: "最後交曬比Yannie (出門房), Kelly (入門房)"
     },
     {
       room: "入門房",
       roomType: "Suite Terrace Access (with breakfast)",
-      roomNumber: "",
+      roomNumber: "2003",
       date: "24/4-25/4 (1 night)",
       guests: "Andrew, Andrew 爸爸媽媽",
       keyCards: 6,
@@ -23,7 +23,7 @@ export default function HotelInfo() {
     {
       room: "Room A",
       roomType: "Premium Balcony",
-      roomNumber: "",
+      roomNumber: "2101",
       date: "24/4-26/4 (2 nights)",
       guests: "Rainbow, TC",
       keyCards: 6,
@@ -33,11 +33,11 @@ export default function HotelInfo() {
     {
       room: "Room B",
       roomType: "Standard",
-      roomNumber: "",
+      roomNumber: "2103",
       date: "24/4-26/4 (2 nights)",
       guests: "1st: Christy 爸爸, Dominic\n2nd: Christy, Andrew",
       keyCards: 10,
-      ownerName: "Christy 媽媽, Christy 爸爸, Andrew (兄弟), Yannie, Kelly, Emily, Yinyin, Dominic, Anna, Vicky",
+      ownerName: "Christy 爸爸, Andrew (兄弟), Yannie, Dominic, Emily, Anna",
       note: "最後交曬比Andrew"
     }
   ];
