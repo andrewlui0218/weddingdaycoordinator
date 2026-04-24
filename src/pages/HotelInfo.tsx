@@ -36,7 +36,7 @@ export default function HotelInfo() {
       roomNumber: "2103",
       date: "24/4-26/4 (2 nights)",
       guests: "1st: Christy 爸爸, Dominic\n2nd: Christy, Andrew",
-      keyCards: 10,
+      keyCards: 6,
       ownerName: "Christy 爸爸, Andrew (兄弟), Yannie, Dominic, Emily, Anna",
       note: "最後交曬比Andrew"
     }
